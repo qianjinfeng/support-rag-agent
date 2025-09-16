@@ -1,0 +1,7 @@
+langchain>=0.1.0
+langchain-community>=0.0.10
+chromadb>=0.4.24
+streamlit>=1.30.0
+dashscope>=1.16.0           # 通义千问 SDK
+python-dotenv               # 环境变量管理
+numpy

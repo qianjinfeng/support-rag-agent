@@ -1,0 +1,38 @@
+[
+  {
+    "id": "P2025-0001",
+    "problem_description": "设备在V2.3.1版本启动时卡在自检界面",
+    "root_cause": "Bootloader与新安全模块固件不兼容",
+    "solution": "1. 回滚至V2.2.8版本；2. 升级安全模块固件后重新烧录",
+    "metadata": {
+      "sw_version": "V2.3.1",
+      "model_type": "X300-Pro",
+      "components": ["bootloader", "security_module"],
+      "country": "Germany"
+    }
+  },
+  {
+    "id": "P2025-0002",
+    "problem_description": "X300-Pro设备在法国频繁断网",
+    "root_cause": "Wi-Fi驱动在特定区域频段配置错误",
+    "solution": "1. 更新Wi-Fi驱动到v1.4.2；2. 手动设置信道为11",
+    "metadata": {
+      "sw_version": "V2.2.8",
+      "model_type": "X300-Pro",
+      "components": ["wifi_driver"],
+      "country": "France"
+    }
+  },
+  {
+    "id": "P2025-0003",
+    "problem_description": "V2.3.1版本下触摸屏无响应",
+    "root_cause": "触摸屏固件未适配新内核",
+    "solution": "烧录专用触摸屏固件 patch_v2.3.1_touch.bin",
+    "metadata": {
+      "sw_version": "V2.3.1",
+      "model_type": "X300-Pro",
+      "components": ["touchscreen"],
+      "country": "China"
+    }
+  }
+]
