@@ -1,4 +1,5 @@
 [
+[
   {
     "id": "P2025-0001",
     "problem_description": "Device gets stuck at self-test screen on startup with version V2.3.1",
@@ -13,26 +14,530 @@
   },
   {
     "id": "P2025-0002",
-    "problem_description": "X300-Pro设备在法国频繁断网",
-    "root_cause": "Wi-Fi驱动在特定区域频段配置错误",
-    "solution": "1. 更新Wi-Fi驱动到v1.4.2；2. 手动设置信道为11",
+    "problem_description": "System fails to boot after update to V3.1.4, showing error code E02",
+    "root_cause": "Corrupted file system during OTA update process",
+    "solution": "1. Enter recovery mode; 2. Perform factory reset; 3. Reinstall firmware V3.1.4",
     "metadata": {
-      "sw_version": "V2.2.8",
-      "model_type": "X300-Pro",
-      "components": ["wifi_driver"],
+      "sw_version": "V3.1.4",
+      "model_type": "X500-Max",
+      "components": ["filesystem", "ota_update"],
       "country": "France"
     }
   },
   {
     "id": "P2025-0003",
-    "problem_description": "V2.3.1版本下触摸屏无响应",
-    "root_cause": "触摸屏固件未适配新内核",
-    "solution": "烧录专用触摸屏固件 patch_v2.3.1_touch.bin",
+    "problem_description": "Touchscreen unresponsive after waking from sleep mode on V2.8.7",
+    "root_cause": "Power management driver fails to reinitialize touch controller",
+    "solution": "1. Update to V2.8.9 which includes driver fix; 2. As workaround, reboot device",
     "metadata": {
-      "sw_version": "V2.3.1",
+      "sw_version": "V2.8.7",
+      "model_type": "X200-Lite",
+      "components": ["power_management", "touch_controller"],
+      "country": "Italy"
+    }
+  },
+  {
+    "id": "P2025-0004",
+    "problem_description": "Wi-Fi drops intermittently on firmware V3.0.2 in high interference areas",
+    "root_cause": "Radio driver has suboptimal channel selection algorithm under congestion",
+    "solution": "1. Switch to manual channel selection; 2. Upgrade to V3.0.5 with improved RF management",
+    "metadata": {
+      "sw_version": "V3.0.2",
+      "model_type": "X400-Turbo",
+      "components": ["wifi_driver", "rf_module"],
+      "country": "Spain"
+    }
+  },
+  {
+    "id": "P2025-0005",
+    "problem_description": "Battery drains rapidly after update to V2.5.6, even in standby",
+    "root_cause": "Background logging service consumes excessive CPU due to infinite loop bug",
+    "solution": "1. Disable logging service via ADB; 2. Apply patch V2.5.7",
+    "metadata": {
+      "sw_version": "V2.5.6",
       "model_type": "X300-Pro",
-      "components": ["touchscreen"],
-      "country": "China"
+      "components": ["battery_management", "logging_service"],
+      "country": "Netherlands"
+    }
+  },
+  {
+    "id": "P2025-0006",
+    "problem_description": "Camera autofocus fails in low light on V3.2.1 firmware",
+    "root_cause": "Image signal processor firmware does not adjust sensitivity correctly in dark conditions",
+    "solution": "1. Use flash to assist focus; 2. Update to V3.2.3 with ISP fix",
+    "metadata": {
+      "sw_version": "V3.2.1",
+      "model_type": "X500-Max",
+      "components": ["camera", "isp_firmware"],
+      "country": "Sweden"
+    }
+  },
+  {
+    "id": "P2025-0007",
+    "problem_description": "Bluetooth pairing fails with legacy devices on V2.9.3",
+    "root_cause": "Security policy update blocks older Bluetooth protocols by default",
+    "solution": "1. Enable legacy pairing in developer settings; 2. No firmware fix planned",
+    "metadata": {
+      "sw_version": "V2.9.3",
+      "model_type": "X200-Lite",
+      "components": ["bluetooth_stack", "security_policy"],
+      "country": "Denmark"
+    }
+  },
+  {
+    "id": "P2025-0008",
+    "problem_description": "Screen flickers when brightness is below 30% on V2.7.4",
+    "root_cause": "PWM frequency for backlight control causes visible flicker at low duty cycles",
+    "solution": "1. Set brightness above 30%; 2. Firmware V2.7.6 increases PWM frequency",
+    "metadata": {
+      "sw_version": "V2.7.4",
+      "model_type": "X300-Pro",
+      "components": ["display_driver", "backlight_control"],
+      "country": "Austria"
+    }
+  },
+  {
+    "id": "P2025-0009",
+    "problem_description": "GPS takes over 10 minutes to acquire fix on cold start with V3.1.0",
+    "root_cause": "AGPS data not being cached properly after system reboot",
+    "solution": "1. Manually trigger AGPS download; 2. Update to V3.1.2 with cache fix",
+    "metadata": {
+      "sw_version": "V3.1.0",
+      "model_type": "X400-Turbo",
+      "components": ["gps_module", "agps_service"],
+      "country": "Switzerland"
+    }
+  },
+  {
+    "id": "P2025-0010",
+    "problem_description": "Voice assistant does not respond to wake word after update to V2.6.5",
+    "root_cause": "Audio preprocessing filter attenuates low frequencies where wake word energy resides",
+    "solution": "1. Recalibrate microphone sensitivity; 2. Patch available in V2.6.7",
+    "metadata": {
+      "sw_version": "V2.6.5",
+      "model_type": "X200-Lite",
+      "components": ["voice_assistant", "audio_filter"],
+      "country": "Norway"
+    }
+  },
+  {
+    "id": "P2025-0011",
+    "problem_description": "External USB storage not recognized on V3.3.2",
+    "root_cause": "Kernel module for USB OTG was accidentally omitted in build",
+    "solution": "1. Reflash with complete V3.3.2 image; 2. Hotfix available",
+    "metadata": {
+      "sw_version": "V3.3.2",
+      "model_type": "X500-Max",
+      "components": ["usb_otg", "kernel_module"],
+      "country": "Finland"
+    }
+  },
+  {
+    "id": "P2025-0012",
+    "problem_description": "System overheats during video playback on V2.4.9",
+    "root_cause": "Thermal throttling algorithm does not reduce GPU frequency aggressively enough",
+    "solution": "1. Limit playback duration; 2. Update to V2.4.11 with improved thermal management",
+    "metadata": {
+      "sw_version": "V2.4.9",
+      "model_type": "X300-Pro",
+      "components": ["thermal_management", "gpu_driver"],
+      "country": "Belgium"
+    }
+  },
+  {
+    "id": "P2025-0013",
+    "problem_description": "Calendar sync fails with Exchange servers on V3.0.8",
+    "root_cause": "SSL/TLS handshake fails due to missing intermediate certificate in trust store",
+    "solution": "1. Manually install certificate; 2. Fixed in V3.0.9",
+    "metadata": {
+      "sw_version": "V3.0.8",
+      "model_type": "X400-Turbo",
+      "components": ["network_security", "calendar_sync"],
+      "country": "Ireland"
+    }
+  },
+  {
+    "id": "P2025-0014",
+    "problem_description": "Speaker produces distorted audio at high volume on V2.9.1",
+    "root_cause": "Digital signal processor clipping due to incorrect gain staging",
+    "solution": "1. Reduce volume to 80% or less; 2. DSP firmware update in V2.9.3",
+    "metadata": {
+      "sw_version": "V2.9.1",
+      "model_type": "X200-Lite",
+      "components": ["audio_dsp", "speaker_driver"],
+      "country": "Portugal"
+    }
+  },
+  {
+    "id": "P2025-0015",
+    "problem_description": "Fingerprint sensor slow to respond after screen timeout on V3.2.0",
+    "root_cause": "Sensor driver enters deep sleep mode that requires longer wake-up time",
+    "solution": "1. Adjust sensor wake-up sensitivity in settings; 2. Fixed in V3.2.2",
+    "metadata": {
+      "sw_version": "V3.2.0",
+      "model_type": "X500-Max",
+      "components": ["fingerprint_sensor", "power_management"],
+      "country": "Greece"
+    }
+  },
+  {
+    "id": "P2025-0016",
+    "problem_description": "App crashes when accessing camera in landscape mode on V2.7.1",
+    "root_cause": "Orientation sensor data not properly synchronized with camera preview",
+    "solution": "1. Use portrait mode; 2. Update to V2.7.3 with sensor fusion fix",
+    "metadata": {
+      "sw_version": "V2.7.1",
+      "model_type": "X300-Pro",
+      "components": ["camera_app", "orientation_sensor"],
+      "country": "Czech Republic"
+    }
+  },
+  {
+    "id": "P2025-0017",
+    "problem_description": "Wi-Fi signal strength drops by 50% after V3.1.3 update",
+    "root_cause": "Antenna diversity algorithm incorrectly switches to weaker antenna",
+    "solution": "1. Manually select primary antenna in service menu; 2. Fixed in V3.1.5",
+    "metadata": {
+      "sw_version": "V3.1.3",
+      "model_type": "X400-Turbo",
+      "components": ["wifi_antenna", "diversity_control"],
+      "country": "Poland"
+    }
+  },
+  {
+    "id": "P2025-0018",
+    "problem_description": "Battery percentage jumps erratically on V2.5.4",
+    "root_cause": "Fuel gauge algorithm miscalculates charge level due to temperature sensor drift",
+    "solution": "1. Calibrate battery through full charge/discharge cycle; 2. Fixed in V2.5.6",
+    "metadata": {
+      "sw_version": "V2.5.4",
+      "model_type": "X200-Lite",
+      "components": ["battery_gauge", "temperature_sensor"],
+      "country": "Hungary"
+    }
+  },
+  {
+    "id": "P2025-0019",
+    "problem_description": "Bluetooth audio stutters during phone calls on V3.3.0",
+    "root_cause": "Coexistence algorithm between Bluetooth and cellular radios needs tuning",
+    "solution": "1. Disable LTE during calls; 2. Improved in V3.3.1",
+    "metadata": {
+      "sw_version": "V3.3.0",
+      "model_type": "X500-Max",
+      "components": ["bt_coexistence", "cellular_radio"],
+      "country": "Romania"
+    }
+  },
+  {
+    "id": "P2025-0020",
+    "problem_description": "Screen freezes when receiving notifications on V2.8.5",
+    "root_cause": "Graphics compositor deadlock when handling rapid notification updates",
+    "solution": "1. Reduce notification frequency; 2. Fixed in V2.8.7",
+    "metadata": {
+      "sw_version": "V2.8.5",
+      "model_type": "X300-Pro",
+      "components": ["graphics_compositor", "notification_service"],
+      "country": "Bulgaria"
+    }
+  },
+  {
+    "id": "P2025-0021",
+    "problem_description": "Device fails to charge when battery is below 5% on V2.6.2",
+    "root_cause": "Charging circuit protection triggers false low-voltage condition",
+    "solution": "1. Leave device off for 30 minutes before charging; 2. Fixed in V2.6.4",
+    "metadata": {
+      "sw_version": "V2.6.2",
+      "model_type": "X200-Lite",
+      "components": ["charging_circuit", "power_management"],
+      "country": "Croatia"
+    }
+  },
+  {
+    "id": "P2025-0022",
+    "problem_description": "Auto-brightness adjusts too slowly on V3.0.1",
+    "root_cause": "Ambient light sensor sampling rate reduced to save power, affecting responsiveness",
+    "solution": "1. Increase sensor sampling rate in developer options; 2. Balanced mode in V3.0.3",
+    "metadata": {
+      "sw_version": "V3.0.1",
+      "model_type": "X400-Turbo",
+      "components": ["light_sensor", "display_brightness"],
+      "country": "Slovakia"
+    }
+  },
+  {
+    "id": "P2025-0023",
+    "problem_description": "Voice calls drop after 2 minutes on V2.9.7",
+    "root_cause": "VoLTE handover timer set too aggressively causing premature handoff to 3G",
+    "solution": "1. Disable VoLTE; 2. Timer adjusted in V2.9.9",
+    "metadata": {
+      "sw_version": "V2.9.7",
+      "model_type": "X300-Pro",
+      "components": ["volte_stack", "handover_control"],
+      "country": "Slovenia"
+    }
+  },
+  {
+    "id": "P2025-0024",
+    "problem_description": "Gallery app crashes when viewing HEIC images on V3.2.4",
+    "root_cause": "Image decoder library missing HEIC support in this build variant",
+    "solution": "1. Convert images to JPEG; 2. Full HEIC support in V3.2.6",
+    "metadata": {
+      "sw_version": "V3.2.4",
+      "model_type": "X500-Max",
+      "components": ["image_decoder", "gallery_app"],
+      "country": "Lithuania"
+    }
+  },
+  {
+    "id": "P2025-0025",
+    "problem_description": "Vibration motor too weak on V2.7.8",
+    "root_cause": "Haptic feedback intensity reduced due to misconfigured motor driver",
+    "solution": "1. Increase vibration strength in settings; 2. Driver fixed in V2.7.10",
+    "metadata": {
+      "sw_version": "V2.7.8",
+      "model_type": "X200-Lite",
+      "components": ["vibration_motor", "haptic_driver"],
+      "country": "Latvia"
+    }
+  },
+  {
+    "id": "P2025-0026",
+    "problem_description": "Wi-Fi hotspot drains battery quickly on V3.1.6",
+    "root_cause": "Hotspot mode keeps CPU awake unnecessarily during idle periods",
+    "solution": "1. Limit hotspot usage time; 2. Power optimization in V3.1.8",
+    "metadata": {
+      "sw_version": "V3.1.6",
+      "model_type": "X400-Turbo",
+      "components": ["hotspot_service", "cpu_power"],
+      "country": "Estonia"
+    }
+  },
+  {
+    "id": "P2025-0027",
+    "problem_description": "Camera shutter lag increased after V2.5.9 update",
+    "root_cause": "Additional image processing steps introduced without optimization",
+    "solution": "1. Use Pro mode for faster capture; 2. Optimized in V2.5.11",
+    "metadata": {
+      "sw_version": "V2.5.9",
+      "model_type": "X300-Pro",
+      "components": ["camera_app", "image_processing"],
+      "country": "Cyprus"
+    }
+  },
+  {
+    "id": "P2025-0028",
+    "problem_description": "Bluetooth file transfer fails with large files on V3.3.4",
+    "root_cause": "OBEX protocol buffer overflow when handling files over 100MB",
+    "solution": "1. Split files before transfer; 2. Fixed in V3.3.6",
+    "metadata": {
+      "sw_version": "V3.3.4",
+      "model_type": "X500-Max",
+      "components": ["obex_stack", "file_transfer"],
+      "country": "Malta"
+    }
+  },
+  {
+    "id": "P2025-0029",
+    "problem_description": "Screen color shifts to blue at low brightness on V2.8.2",
+    "root_cause": "Color calibration LUT not properly applied in low brightness range",
+    "solution": "1. Increase brightness; 2. Fixed in V2.8.4",
+    "metadata": {
+      "sw_version": "V2.8.2",
+      "model_type": "X200-Lite",
+      "components": ["color_calibration", "display_driver"],
+      "country": "Luxembourg"
+    }
+  },
+  {
+    "id": "P2025-0030",
+    "problem_description": "GPS accuracy degraded in urban canyons on V3.0.5",
+    "root_cause": "Multi-path detection algorithm disabled in this firmware version",
+    "solution": "1. Use assisted GPS; 2. Re-enabled in V3.0.7",
+    "metadata": {
+      "sw_version": "V3.0.5",
+      "model_type": "X400-Turbo",
+      "components": ["gps_algorithm", "urban_navigation"],
+      "country": "Iceland"
+    }
+  },
+  {
+    "id": "P2025-0031",
+    "problem_description": "Voice assistant activates randomly on V2.6.8",
+    "root_cause": "Wake word detection threshold set too low, causing false triggers",
+    "solution": "1. Increase sensitivity threshold; 2. Improved in V2.6.10",
+    "metadata": {
+      "sw_version": "V2.6.8",
+      "model_type": "X300-Pro",
+      "components": ["voice_detection", "noise_filtering"],
+      "country": "Serbia"
+    }
+  },
+  {
+    "id": "P2025-0032",
+    "problem_description": "USB-C charging only works in one orientation on V2.4.5",
+    "root_cause": "Firmware does not properly detect cable orientation for power negotiation",
+    "solution": "1. Flip cable; 2. Fixed in V2.4.7",
+    "metadata": {
+      "sw_version": "V2.4.5",
+      "model_type": "X200-Lite",
+      "components": ["usb_type_c", "power_delivery"],
+      "country": "Montenegro"
+    }
+  },
+  {
+    "id": "P2025-0033",
+    "problem_description": "System UI lags when scrolling lists on V3.2.7",
+    "root_cause": "GPU shader compilation causes micro-stutters during UI rendering",
+    "solution": "1. Disable animations; 2. Pre-compiled shaders in V3.2.9",
+    "metadata": {
+      "sw_version": "V3.2.7",
+      "model_type": "X500-Max",
+      "components": ["ui_renderer", "gpu_shader"],
+      "country": "Albania"
+    }
+  },
+  {
+    "id": "P2025-0034",
+    "problem_description": "Speakerphone volume too low on V2.9.4",
+    "root_cause": "Audio amplifier gain reduced to prevent distortion, but too conservatively",
+    "solution": "1. Use regular earpiece; 2. Balanced gain in V2.9.6",
+    "metadata": {
+      "sw_version": "V2.9.4",
+      "model_type": "X300-Pro",
+      "components": ["audio_amplifier", "speakerphone"],
+      "country": "North Macedonia"
+    }
+  },
+  {
+    "id": "P2025-0035",
+    "problem_description": "Calendar events not syncing with Google on V3.1.1",
+    "root_cause": "OAuth token refresh mechanism fails silently when network is unstable",
+    "solution": "1. Re-authenticate Google account; 2. Fixed in V3.1.3",
+    "metadata": {
+      "sw_version": "V3.1.1",
+      "model_type": "X400-Turbo",
+      "components": ["oauth_service", "calendar_sync"],
+      "country": "Bosnia and Herzegovina"
+    }
+  },
+  {
+    "id": "P2025-0036",
+    "problem_description": "Fingerprint sensor fails in humid conditions on V2.7.5",
+    "root_cause": "Moisture detection algorithm too sensitive, disabling sensor unnecessarily",
+    "solution": "1. Dry finger and sensor; 2. Adjusted sensitivity in V2.7.7",
+    "metadata": {
+      "sw_version": "V2.7.5",
+      "model_type": "X200-Lite",
+      "components": ["fingerprint_sensor", "moisture_detection"],
+      "country": "Kosovo"
+    }
+  },
+  {
+    "id": "P2025-0037",
+    "problem_description": "Wi-Fi disconnects when switching between 2.4GHz and 5GHz bands on V3.0.3",
+    "root_cause": "Roaming assistant does not handle band transition smoothly",
+    "solution": "1. Lock to preferred band; 2. Improved roaming in V3.0.5",
+    "metadata": {
+      "sw_version": "V3.0.3",
+      "model_type": "X300-Pro",
+      "components": ["wifi_roaming", "band_selection"],
+      "country": "Moldova"
+    }
+  },
+  {
+    "id": "P2025-0038",
+    "problem_description": "Battery drains overnight despite no usage on V2.5.7",
+    "root_cause": "Background sync service wakes device every 15 minutes",
+    "solution": "1. Disable background sync; 2. Fixed in V2.5.9",
+    "metadata": {
+      "sw_version": "V2.5.7",
+      "model_type": "X500-Max",
+      "components": ["background_sync", "wakelock"],
+      "country": "Georgia"
+    }
+  },
+  {
+    "id": "P2025-0039",
+    "problem_description": "Camera flash fires randomly on V3.3.1",
+    "root_cause": "Faulty logic in flash auto-mode when light levels are near threshold",
+    "solution": "1. Use manual flash control; 2. Fixed in V3.3.3",
+    "metadata": {
+      "sw_version": "V3.3.1",
+      "model_type": "X400-Turbo",
+      "components": ["flash_control", "light_sensor"],
+      "country": "Armenia"
+    }
+  },
+  {
+    "id": "P2025-0040",
+    "problem_description": "Screen touch unresponsive in cold temperatures on V2.8.3",
+    "root_cause": "Capacitive touch controller requires higher voltage in cold, not provided",
+    "solution": "1. Warm device; 2. Fixed in V2.8.5 with voltage adjustment",
+    "metadata": {
+      "sw_version": "V2.8.3",
+      "model_type": "X200-Lite",
+      "components": ["touch_controller", "temperature_compensation"],
+      "country": "Azerbaijan"
+    }
+  },
+  {
+    "id": "P2025-0041",
+    "problem_description": "Bluetooth audio delay increased on V2.6.9",
+    "root_cause": "Audio buffering increased to prevent dropouts, causing higher latency",
+    "solution": "1. Disable audio enhancements; 2. Optimized buffer in V2.6.11",
+    "metadata": {
+      "sw_version": "V2.6.9",
+      "model_type": "X300-Pro",
+      "components": ["audio_buffer", "bt_latency"],
+      "country": "Turkey"
+    }
+  },
+  {
+    "id": "P2025-0042",
+    "problem_description": "Device fails to boot after failed OTA update on V2.4.8",
+    "root_cause": "Recovery partition not properly updated, causing boot loop",
+    "solution": "1. Flash recovery image via fastboot; 2. Fixed update process in V2.4.10",
+    "metadata": {
+      "sw_version": "V2.4.8",
+      "model_type": "X200-Lite",
+      "components": ["recovery_partition", "ota_update"],
+      "country": "Russia"
+    }
+  },
+  {
+    "id": "P2025-0043",
+    "problem_description": "Auto-rotate not working on V3.2.8",
+    "root_cause": "Gyroscope data not being read by orientation service due to permission issue",
+    "solution": "1. Reset app permissions; 2. Fixed in V3.2.10",
+    "metadata": {
+      "sw_version": "V3.2.8",
+      "model_type": "X500-Max",
+      "components": ["gyroscope", "orientation_service"],
+      "country": "Ukraine"
+    }
+  },
+  {
+    "id": "P2025-0044",
+    "problem_description": "Speaker produces buzzing noise on V2.9.8",
+    "root_cause": "Ground loop in audio circuit caused by new power saving mode",
+    "solution": "1. Disable power saving for audio; 2. Circuit fix in V2.9.10",
+    "metadata": {
+      "sw_version": "V2.9.8",
+      "model_type": "X300-Pro",
+      "components": ["audio_circuit", "power_saving"],
+      "country": "Belarus"
+    }
+  },
+  {
+    "id": "P2025-0045",
+    "problem_description": "Wi-Fi signal drops when holding device in left hand on V3.1.7",
+    "root_cause": "Antenna detuning detection algorithm too aggressive, reducing power unnecessarily",
+    "solution": "1. Hold differently; 2. Tuned algorithm in V3.1.9",
+    "metadata": {
+      "sw_version": "V3.1.7",
+      "model_type": "X400-Turbo",
+      "components": ["antenna_detuning", "hand_effect"],
+      "country": "Switzerland"
     }
   }
 ]

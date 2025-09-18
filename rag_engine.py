@@ -15,7 +15,7 @@ embedding_model = OllamaEmbeddings(
 
 # ✅ 使用 OllamaLLM（新类）
 llm = OllamaLLM(
-    model="qwen:1.8b",
+    model="llama3.2:1b",
     base_url="http://host.docker.internal:11434",
     temperature=0.2
 )
@@ -91,14 +91,30 @@ class RAGEngine:
                 embedding_function=embedding_model
             )
 
-        where = {}
+        # 构建 filter 使用 ChromaDB 正确的操作符语法
+        filters = []
         if model_type:
-            where["model_type"] = model_type
+            filters.append({"model_type": {"$eq": model_type}})
         if sw_version:
-            where["sw_version"] = sw_version
+            filters.append({"sw_version": {"$eq": sw_version}})
+        # 可选：添加 components 或 country 过滤
+        # if country:
+        #     filters.append({"country": {"$eq": country}})
+
+        # 只有当有至少一个条件时，才使用 $and
+        if len(filters) == 0:
+            # 无过滤条件：不传 filter
+            kwargs = {"k": 3}
+        elif len(filters) == 1:
+            # 单个条件：直接传（不需要 $and）
+            kwargs = {"k": 3, "filter": filters[0]}
+        else:
+            # 多个条件：用 $and 包裹
+            kwargs = {"k": 3, "filter": {"$and": filters}}
 
         results = self.vectorstore.similarity_search_with_score(
-            question, k=3, where=where
+            question,
+            **kwargs
         )
 
         context = ""
