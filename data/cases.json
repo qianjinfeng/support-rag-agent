@@ -1,9 +1,9 @@
 [
   {
     "id": "P2025-0001",
-    "problem_description": "设备在V2.3.1版本启动时卡在自检界面",
-    "root_cause": "Bootloader与新安全模块固件不兼容",
-    "solution": "1. 回滚至V2.2.8版本；2. 升级安全模块固件后重新烧录",
+    "problem_description": "Device gets stuck at self-test screen on startup with version V2.3.1",
+    "root_cause": "Bootloader is incompatible with the new security module firmware",
+    "solution": "1. Roll back to version V2.2.8; 2. Upgrade the security module firmware and reflash",
     "metadata": {
       "sw_version": "V2.3.1",
       "model_type": "X300-Pro",

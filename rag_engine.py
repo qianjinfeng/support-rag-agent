@@ -1,59 +1,65 @@
 # rag_engine.py
-import chromadb
-from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_ollama import OllamaEmbeddings, OllamaLLM
+from langchain_chroma import Chroma
 from langchain_core.prompts import ChatPromptTemplate
-from langchain_community.llms import Tongyi
 import os
 
-# 初始化嵌入模型（中文推荐 BGE）
-embedding_model = HuggingFaceEmbeddings(model_name="BAAI/bge-large-zh-v1.5")
+# 更新后的 rag_engine.py 核心部分
 
-# 通义千问 API
-os.environ["DASHSCOPE_API_KEY"] = os.getenv("DASHSCOPE_API_KEY")
 
-# Prompt 模板
+# ✅ 使用新方式创建 embedding
+embedding_model = OllamaEmbeddings(
+    model="nomic-embed-text",
+    base_url="http://host.docker.internal:11434"
+)
+
+# ✅ 使用 OllamaLLM（新类）
+llm = OllamaLLM(
+    model="qwen:1.8b",
+    base_url="http://host.docker.internal:11434",
+    temperature=0.2
+)
+
+# 后续逻辑不变...
+
 PROMPT_TEMPLATE = """
-你是一个专业的技术支持助手，请根据以下历史案例，为当前问题提供分析和建议。
+You are a professional technical support assistant. Please analyze the user's issue and provide recommendations.
 
-【当前设备信息】
-- 软件版本: {sw_version}
-- 机型: {model_type}
-- 组件: {components}
-- 国家: {country}
+【Device Context】
+- Software Version: {sw_version}
+- Model Type: {model_type}
+- Components: {components}
+- Country: {country}
 
-【相似历史案例】
+【Relevant Historical Cases】
 {context}
 
-【用户描述的新问题】
+【User's Problem】
 "{question}"
 
-请按以下格式回答：
+Please respond in the following format:
 
-🔍 **问题分析**：
-简要分析可能的根本原因。
+🔍 **Problem Analysis**:
+Briefly explain the possible root cause.
 
-🛠️ **解决方案建议**：
-1. ...
-2. ...
+🛠️ **Recommended Solution**:
+1. Step-by-step actions.
+2. If multiple, list clearly.
 
-📌 **注意事项**：
-- 如涉及升级/烧录，请提醒备份。
-- 如与国家合规相关，请说明。
+📌 **Notes**:
+- Remind to back up before updates.
+- Mention compliance if needed.
 
-🔗 **参考案例**：
+🔗 **Reference Cases**:
 {references}
 
-❓ **如信息不足**：
-请建议进一步收集哪些信息。
+❓ **If More Info Needed**:
+Suggest what logs or details to collect.
 """
 
 class RAGEngine:
     def __init__(self, db_path="./chroma_db"):
         self.db_path = db_path
-        self.client = chromadb.PersistentClient(path=db_path)
-        self.collection = None
-        self.llm = Tongyi(model_name="qwen-max", api_key=os.getenv("DASHSCOPE_API_KEY"))
         self.vectorstore = None
 
     def load_data(self, data):
@@ -68,7 +74,6 @@ class RAGEngine:
             metadatas.append(item["metadata"])
             ids.append(item["id"])
 
-        # 创建 Chroma 向量库
         self.vectorstore = Chroma.from_texts(
             texts=texts,
             embedding=embedding_model,
@@ -76,49 +81,41 @@ class RAGEngine:
             ids=ids,
             persist_directory=self.db_path
         )
-        print(f"✅ 已导入 {len(data)} 条问题到向量数据库")
+        print(f"✅ Loaded {len(data)} cases into vector DB")
 
     def query(self, question, sw_version=None, model_type=None, components=None, country=None):
-        """查询相似问题并生成回答"""
+        """查询并生成回答"""
         if not self.vectorstore:
             self.vectorstore = Chroma(
                 persist_directory=self.db_path,
                 embedding_function=embedding_model
             )
 
-        # 构建过滤条件
         where = {}
         if model_type:
             where["model_type"] = model_type
         if sw_version:
             where["sw_version"] = sw_version
 
-        # 检索相似案例（最多3个）
         results = self.vectorstore.similarity_search_with_score(
-            question, 
-            k=3, 
-            where=where
+            question, k=3, where=where
         )
 
-        # 构建上下文
         context = ""
         references = ""
         for doc, score in results:
-            context += f"\n【案例 {doc.metadata['id']}】\n问题: {doc.page_content}\n"
-            references += f"- {doc.metadata['id']} (相似度: {1-score:.2f})\n"
+            context += f"\n[Case {doc.metadata['id']}]\n{doc.page_content}\n"
+            references += f"- {doc.metadata['id']} (similarity: {1-score:.2f})\n"
 
-        # 生成 Prompt
-        prompt = ChatPromptTemplate.from_messages([
-            ("human", PROMPT_TEMPLATE)
-        ])
-        chain = prompt | self.llm
+        prompt = ChatPromptTemplate.from_messages([("human", PROMPT_TEMPLATE)])
+        chain = prompt | llm
 
         response = chain.invoke({
             "question": question,
-            "sw_version": sw_version or "未知",
-            "model_type": model_type or "未知",
-            "components": ", ".join(components) if components else "未知",
-            "country": country or "未知",
+            "sw_version": sw_version or "Unknown",
+            "model_type": model_type or "Unknown",
+            "components": ", ".join(components) if components else "Unknown",
+            "country": country or "Unknown",
             "context": context,
             "references": references
         })

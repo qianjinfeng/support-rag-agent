@@ -3,11 +3,18 @@ version: '3.8'
 
 services:
   rag-agent:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8501:8501"
-    environment:
-      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
     volumes:
       - ./chroma_db:/app/chroma_db
+      - ./data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - OLLAMA_HOST=http://host.docker.internal:11434
+    stdin_open: true
+    tty: true
     restart: unless-stopped
